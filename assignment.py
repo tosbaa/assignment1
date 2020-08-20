@@ -4,6 +4,7 @@ import random
 from scipy.stats import norm
 import matplotlib.pyplot as plt
 from scipy.stats.kde import gaussian_kde
+from itertools import combinations
 
 data = pd.read_csv("./bank.csv", sep=r';', header=0)
 
@@ -60,4 +61,10 @@ data = pd.read_csv("./bank.csv", sep=r';', header=0)
 ## End of 4
 
 
-## 5 
+## 5 Plot the scatter plots of each pair of numerical attributes
+
+data_numerical = data.select_dtypes(include=np.number)
+comb = list(combinations(list(data_numerical), 2))
+print(len(comb))
+
+
