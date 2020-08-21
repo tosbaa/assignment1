@@ -5,8 +5,13 @@ from scipy.stats import norm
 import matplotlib.pyplot as plt
 from scipy.stats.kde import gaussian_kde
 from itertools import combinations
+from scipy.spatial import distance
+
 
 data = pd.read_csv("./bank.csv", sep=r';', header=0)
+
+
+
 
 ##2 Calculate mean, standart deviation, mode and skewness
 
@@ -63,8 +68,30 @@ data = pd.read_csv("./bank.csv", sep=r';', header=0)
 
 ## 5 Plot the scatter plots of each pair of numerical attributes
 
+# data_numerical = data.select_dtypes(include=np.number)
+# comb = list(combinations(list(data_numerical), 2))
+# print(len(comb))
+
+
+## End of 5
+
+## 6 7
+
 data_numerical = data.select_dtypes(include=np.number)
-comb = list(combinations(list(data_numerical), 2))
-print(len(comb))
 
+data_numerical_list = data_numerical.values.tolist()
+matrix_euclidian = []
 
+for i in range(50):
+    arr_euclidian = []
+    for j in range(50):
+        arr_euclidian.append(distance.euclidean(data_numerical_list[i], data_numerical_list[j]))
+    matrix_euclidian.append(arr_euclidian)
+
+df = pd.DataFrame(matrix_euclidian, columns=[i for i in range(50)])
+
+writer = pd.ExcelWriter("euclidian.xlsx")
+df.to_excel(writer, sheet_name="Euclidian", index=True)
+writer.save()
+
+##
