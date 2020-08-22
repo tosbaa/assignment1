@@ -80,18 +80,31 @@ data = pd.read_csv("./bank.csv", sep=r';', header=0)
 data_numerical = data.select_dtypes(include=np.number)
 
 data_numerical_list = data_numerical.values.tolist()
-matrix_euclidian = []
 
-for i in range(50):
-    arr_euclidian = []
-    for j in range(50):
-        arr_euclidian.append(distance.euclidean(data_numerical_list[i], data_numerical_list[j]))
-    matrix_euclidian.append(arr_euclidian)
+sample = data_numerical_list[:7]
 
-df = pd.DataFrame(matrix_euclidian, columns=[i for i in range(50)])
+matrix_maholonobis = []
+for i in sample:
+    arr_maholonobis = []
+    for j in sample:
+        arr_maholonobis.append(distance.mahalanobis(i, j, sample))
+    matrix_maholonobis.append(arr_maholonobis)
+print(matrix_maholonobis)
 
-writer = pd.ExcelWriter("euclidian.xlsx")
-df.to_excel(writer, sheet_name="Euclidian", index=True)
+
+
+# matrix_euclidian = []
+
+# for i in range(50):
+#     arr_euclidian = []
+#     for j in range(50):
+#         arr_euclidian.append(distance.euclidean(data_numerical_list[i], data_numerical_list[j]))
+#     matrix_euclidian.append(arr_euclidian)
+
+df = pd.DataFrame(matrix_maholonobis, columns=[i for i in range(7)])
+
+writer = pd.ExcelWriter("maholonobis.xlsx")
+df.to_excel(writer, sheet_name="Maholonobis", index=True)
 writer.save()
 
 ##
